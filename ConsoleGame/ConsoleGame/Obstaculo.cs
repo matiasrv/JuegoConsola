@@ -14,6 +14,12 @@ namespace ConsoleGame
             locationY = 20;
             Dibujar();
         }
+        public Obstaculo(int x, int y)
+        {
+            locationX = x;
+            locationY = y;
+            Dibujar();
+        }
         public override void Dibujar()
         {
             base.Dibujar();

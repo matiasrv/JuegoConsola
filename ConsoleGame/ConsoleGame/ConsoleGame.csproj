@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Enemigo.cs" />
     <Compile Include="Entidad.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Jugador.cs" />
     <Compile Include="Obstaculo.cs" />
     <Compile Include="Program.cs" />

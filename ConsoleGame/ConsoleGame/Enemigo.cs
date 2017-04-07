@@ -15,6 +15,12 @@ namespace ConsoleGame
             locationX = num.Next(20,78);
             locationY = num.Next(15,22);
         }
+        public Enemigo(int x, int y)
+        {
+            locationX = x;
+            locationY = y;
+            Dibujar();
+        }
         public override void Dibujar()
         {
             base.Dibujar();

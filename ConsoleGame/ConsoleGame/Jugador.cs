@@ -27,7 +27,6 @@ namespace ConsoleGame
                     {
                         locationX = locationX - 1;
                     }
-                    Dibujar();
                     break;
                 case ConsoleKey.RightArrow:
                     // Si se puede mover a la derecha
@@ -35,7 +34,6 @@ namespace ConsoleGame
                     {
                         locationX = locationX + 1;
                     }
-                    Dibujar();
                     break;
                 case ConsoleKey.UpArrow:
                     // Si se puede mover arriba
@@ -43,7 +41,6 @@ namespace ConsoleGame
                     {
                         locationY = locationY - 1;
                     }
-                    Dibujar();
                     break;
                 case ConsoleKey.DownArrow:
                     // Si se puede mover abajo
@@ -51,11 +48,10 @@ namespace ConsoleGame
                     {
                         locationY = locationY + 1;
                     }
-                    Dibujar();
                     break;
                 case ConsoleKey.Escape:
                     // Salir del juego al presionar escape
-                    Program.gameRunning = false;
+                    Game.gameRunning = false;
                     break;
             }
         }

@@ -45,5 +45,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-ConsoleGame/ConsoleGame/bin
-ConsoleGame/ConsoleGame/obj
+ConsoleGame/ConsoleGame/bin/*
+ConsoleGame/ConsoleGame/obj/*
+ConsoleGame/ConsoleGame/bin/Debug/ConsoleGame.exe
+ConsoleGame/ConsoleGame/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+ConsoleGame/ConsoleGame/bin/Debug/ConsoleGame.exe
+ConsoleGame/ConsoleGame/obj/Debug/ConsoleGame.exe
+ConsoleGame/ConsoleGame/obj/Debug/ConsoleGame.pdb
