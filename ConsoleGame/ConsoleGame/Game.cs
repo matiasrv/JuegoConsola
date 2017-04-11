@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleGame
 {
@@ -19,7 +15,7 @@ namespace ConsoleGame
             Console.ReadKey();
             Console.Clear();
         }
-        public static void CheckGameOver(Entidad jugador, Entidad o, Entidad e1, Entidad e2, Entidad e3)
+        public static void CheckGameOver(Entidad jugador, Entidad o, Entidad e1, Entidad e2, Entidad e3)//modificar
         {
             if (jugador.getX() == e1.getX() && jugador.getY() == e1.getY())
             {
@@ -41,11 +37,20 @@ namespace ConsoleGame
         public void Play()
         {
             ConsoleKeyInfo userKey;
+
             Jugador player = new Jugador();
             Obstaculo obs1 = new Obstaculo();
-            Enemigo ene1 = new Enemigo();
-            Enemigo ene2 = new Enemigo(30,15);
-            Enemigo ene3 = new Enemigo(40,10);
+
+            Enemigo[] enemigos = new Enemigo[3];
+            for(int i=0;i<enemigos.Length;i++)
+            {
+                enemigos[i] = new Enemigo();
+            }
+            for (int i = 0; i < enemigos.Length; i++)
+            {
+                enemigos[i].Dibujar();
+            }
+
             while (gameRunning)
             {
                 Console.Clear();
@@ -58,11 +63,10 @@ namespace ConsoleGame
                 //dibujar todas las entidades
                 player.Dibujar();
                 obs1.Dibujar();
-                ene1.Mover();
-                ene2.Mover();
-                ene3.Mover();
+                for (int i = 0; i < enemigos.Length; i++)
+                    enemigos[i].Mover();
                 //incluir todas las entidades como parametros
-                CheckGameOver(player, obs1, ene1, ene2, ene3);
+                CheckGameOver(player, obs1, enemigos[0], enemigos[1], enemigos[2]);//modificar
 
                 System.Threading.Thread.Sleep(150);
             }

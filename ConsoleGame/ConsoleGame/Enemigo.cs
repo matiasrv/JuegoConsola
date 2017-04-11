@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleGame
 {
     class Enemigo : Entidad
     {
-        Random num = new Random();
+        private static Random num = new Random();
 
         public Enemigo()
         {
             locationX = num.Next(20,78);
             locationY = num.Next(15,22);
-        }
-        public Enemigo(int x, int y)
-        {
-            locationX = x;
-            locationY = y;
-            Dibujar();
         }
         public override void Dibujar()
         {
