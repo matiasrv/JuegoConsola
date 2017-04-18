@@ -8,8 +8,8 @@ namespace ConsoleGame
 
         public Enemigo()
         {
-            locationX = num.Next(20,78);
-            locationY = num.Next(15,22);
+            locationX = num.Next(10,78);
+            locationY = num.Next(7,22);
         }
         public override void Dibujar()
         {

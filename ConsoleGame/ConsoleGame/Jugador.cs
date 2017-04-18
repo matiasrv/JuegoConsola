@@ -4,10 +4,6 @@ namespace ConsoleGame
 {
     class Jugador : Entidad
     {
-        public Jugador()
-        {
-            Dibujar();
-        }
         public override void Dibujar()
         {
             base.Dibujar();

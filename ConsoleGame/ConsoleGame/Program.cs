@@ -22,15 +22,18 @@ namespace ConsoleGame
             }
             else
             {
-                FileStream fs = File.OpenRead("mensajeBienvenida");
+                FileStream fs = File.OpenRead("mensajeBienvenida.txt");
                 StreamReader sr = new StreamReader(fs);
 
-                Console.WriteLine(sr.Read());
+                Console.SetCursorPosition(0,12);
+                Console.WriteLine(sr.ReadLine());
 
                 sr.Close();
 
                 fs.Close();
+                Console.ReadKey();
             }
+            Console.Clear();
         }
         static void Main(string[] args)
         {

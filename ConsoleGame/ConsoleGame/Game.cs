@@ -5,74 +5,129 @@ namespace ConsoleGame
     class Game
     {
         public static bool gameRunning = true;
+        public static int highScore = 0;
+        public static int score = 0;
 
         public Game()
         {
             Console.SetCursorPosition(35, 9);
             Console.Write("Game Start");
-            Console.SetCursorPosition(30, 12);
-            Console.Write("Presione cualquier tecla");
-            Console.ReadKey();
-            Console.Clear();
+            Console.SetCursorPosition(22, 12);
+            Console.Write("Nuevo Juego = Enter   Salir = Escape");
         }
-        public static void CheckGameOver(Entidad jugador, Entidad o, Entidad e1, Entidad e2, Entidad e3)//modificar
+        private static void ChequearColisiones(Entidad _jugador, Entidad[] _obstaculos, Entidad[] _enemigos, Entidad[] _monedas)
         {
-            if (jugador.getX() == e1.getX() && jugador.getY() == e1.getY())
+            for (int i = 0; i < _enemigos.Length; i++)
             {
-                gameRunning = false;
+                if (_jugador.getX() == _enemigos[i].getX() && _jugador.getY() == _enemigos[i].getY())
+                {
+                    gameRunning = false;
+                }
             }
-            else if (jugador.getX() == e2.getX() && jugador.getY() == e2.getY())
+            for (int i = 0; i < _obstaculos.Length; i++)
             {
-                gameRunning = false;
+                if (_jugador.getX() == _obstaculos[i].getX() && _jugador.getY() == _obstaculos[i].getY())
+                {
+                    gameRunning = false;
+                }
             }
-            else if (jugador.getX() == e3.getX() && jugador.getY() == e3.getY())
+            /*for (int i = 0; i < _monedas.Length; i++)
             {
-                gameRunning = false;
-            }
-            else if (jugador.getX() == o.getX() && jugador.getY() == o.getY())
-            {
-                gameRunning = false;
-            }
+                if (_jugador.getX() == _monedas[i].getX() && _jugador.getY() == _monedas[i].getY())
+                {
+                    score++;
+                    _monedas[i].kill();
+                }
+            }*/
         }
         public void Play()
         {
             ConsoleKeyInfo userKey;
-
-            Jugador player = new Jugador();
-            Obstaculo obs1 = new Obstaculo();
-
-            Enemigo[] enemigos = new Enemigo[3];
-            for(int i=0;i<enemigos.Length;i++)
+            do
             {
-                enemigos[i] = new Enemigo();
-            }
-            for (int i = 0; i < enemigos.Length; i++)
-            {
-                enemigos[i].Dibujar();
-            }
+                userKey = Console.ReadKey();
+                switch (userKey.Key)
+                {
+                    case ConsoleKey.Enter:
+                        gameRunning = true;
+                        break;
+                    case ConsoleKey.Escape:
+                        gameRunning = false;
+                        break;
+                }
+            } while (userKey.Key != ConsoleKey.Enter && userKey.Key != ConsoleKey.Escape);
 
             while (gameRunning)
             {
-                Console.Clear();
-                // Proceso de input para movimiento del jugador
-                if (Console.KeyAvailable)
+                Jugador player = new Jugador();
+                Obstaculo[] obstaculos = new Obstaculo[10];
+                for(int i= 0;i < obstaculos.Length;i++)
                 {
-                    userKey = Console.ReadKey(true);
-                    player.Mover(userKey);
+                    obstaculos[i] = new Obstaculo();
                 }
-                //dibujar todas las entidades
-                player.Dibujar();
-                obs1.Dibujar();
+                Enemigo[] enemigos = new Enemigo[10];
                 for (int i = 0; i < enemigos.Length; i++)
-                    enemigos[i].Mover();
-                //incluir todas las entidades como parametros
-                CheckGameOver(player, obs1, enemigos[0], enemigos[1], enemigos[2]);//modificar
+                {
+                    enemigos[i] = new Enemigo();
+                }
+                Coin[] monedas = new Coin[20];
+                for (int i = 0; i < monedas.Length; i++)
+                {
+                    monedas[i] = new Coin();
+                }
 
-                System.Threading.Thread.Sleep(150);
+                while (gameRunning)
+                {
+                    Console.Clear();
+                    // Proceso de input para movimiento del jugador
+                    if (Console.KeyAvailable)
+                    {
+                        userKey = Console.ReadKey(true);
+                        player.Mover(userKey);
+                    }
+                    //dibujar todas las entidades
+                    for (int i = 0; i < monedas.Length; i++)
+                        monedas[i].Dibujar();
+                    player.Dibujar();
+                    for (int i = 0; i < obstaculos.Length; i++)
+                        obstaculos[i].Dibujar();
+                    for (int i = 0; i < enemigos.Length; i++)
+                        enemigos[i].Mover();
+
+                    ChequearColisiones(player, obstaculos, enemigos, monedas);
+
+                    System.Threading.Thread.Sleep(150);
+                }
+                if (score > highScore)
+                {
+                    highScore = score;
+                    score = 0;
+                }
+
+                Console.Clear();
+                Console.SetCursorPosition(37, 12);
+                Console.WriteLine("Game Over");
+                Console.SetCursorPosition(22, 13);
+                Console.Write("Nuevo Juego = Enter   Salir = Escape");
+
+                do
+                {
+                    userKey = Console.ReadKey();
+                    switch (userKey.Key)
+                    {
+                        case ConsoleKey.Enter:
+                            gameRunning = true;
+                            break;
+                        case ConsoleKey.Escape:
+                            gameRunning = false;
+                            break;
+                    }
+                } while (userKey.Key != ConsoleKey.Enter && userKey.Key != ConsoleKey.Escape);
+
             }
             Console.Clear();
-            Console.SetCursorPosition(37, 12);
-            Console.Write("Game Over");
+            Console.SetCursorPosition(36, 12);
+            Console.Write("saliendo");
             Console.ReadKey();
         }
     }
