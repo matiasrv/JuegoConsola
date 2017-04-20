@@ -22,30 +22,30 @@ namespace ConsoleGame
             {
                 case 1:
                     if (locationX > 0)
-                    {
                         locationX = locationX - 1;
-                    }
+                    else
+                        locationX = locationX + 1;
                     Dibujar();
                     break;
                 case 2:
                     if (locationX < 78)
-                    {
                         locationX = locationX + 1;
-                    }
+                    else
+                        locationX = locationX - 1;
                     Dibujar();
                     break;
                 case 3:
                     if (locationY > 0)
-                    {
                         locationY = locationY - 1;
-                    }
+                    else
+                        locationY = locationY + 1;
                     Dibujar();
                     break;
                 case 4:
                     if (locationY < 24)
-                    {
                         locationY = locationY + 1;
-                    }
+                    else
+                        locationY = locationY - 1;
                     Dibujar();
                     break;
             }

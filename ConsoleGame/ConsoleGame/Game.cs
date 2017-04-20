@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace ConsoleGame
 {
@@ -7,15 +8,53 @@ namespace ConsoleGame
         public static bool gameRunning = true;
         public static int highScore = 0;
         public static int score = 0;
+        private static ConsoleKeyInfo userKey;
+        private static string nameHighscore;
+
+        /*[Serializable]
+        struct player1
+        {
+            public static int pX;
+            public static int pY;
+        }*/
 
         public Game()
         {
-            Console.SetCursorPosition(35, 9);
-            Console.Write("Game Start");
-            Console.SetCursorPosition(22, 12);
-            Console.Write("Nuevo Juego = Enter   Salir = Escape");
+            if(File.Exists("Highscore.txt"))
+            {
+                FileStream fs = File.OpenRead("Highscore.txt");
+                BinaryReader br = new BinaryReader(fs);
+
+                highScore = br.ReadInt32();
+                nameHighscore = br.ReadString();
+                br.Close();
+                fs.Close();
+            }
+            Menu();
         }
-        private static void ChequearColisiones(Entidad _jugador, Entidad[] _obstaculos, Entidad[] _enemigos, Entidad[] _monedas)
+        public void Menu()
+        {
+            if(highScore != 0)
+                Console.Write("Highscore = " + highScore + "  " + nameHighscore);
+
+            Console.SetCursorPosition(22, 13);
+            Console.Write("Nuevo Juego = Enter   Salir = Escape");
+
+            do
+            {
+                userKey = Console.ReadKey();
+                switch (userKey.Key)
+                {
+                    case ConsoleKey.Enter:
+                        gameRunning = true;
+                        break;
+                    case ConsoleKey.Escape:
+                        gameRunning = false;
+                        break;
+                }
+            } while (userKey.Key != ConsoleKey.Enter && userKey.Key != ConsoleKey.Escape);
+        }
+        private static void ChequearColisiones(Jugador _jugador, Obstaculo[] _obstaculos, Enemigo[] _enemigos, ref Coin[] _monedas)
         {
             for (int i = 0; i < _enemigos.Length; i++)
             {
@@ -31,50 +70,37 @@ namespace ConsoleGame
                     gameRunning = false;
                 }
             }
-            /*for (int i = 0; i < _monedas.Length; i++)
+            for (int i = 0; i < _monedas.Length; i++)
             {
-                if (_jugador.getX() == _monedas[i].getX() && _jugador.getY() == _monedas[i].getY())
+                if(_monedas[i] != null)
                 {
-                    score++;
-                    _monedas[i].kill();
+                    if (_jugador.getX() == _monedas[i].getX() && _jugador.getY() == _monedas[i].getY())
+                    {
+                        score++;
+                        _monedas[i] = null;
+                    }
                 }
-            }*/
+            }
         }
         public void Play()
         {
-            ConsoleKeyInfo userKey;
-            do
-            {
-                userKey = Console.ReadKey();
-                switch (userKey.Key)
-                {
-                    case ConsoleKey.Enter:
-                        gameRunning = true;
-                        break;
-                    case ConsoleKey.Escape:
-                        gameRunning = false;
-                        break;
-                }
-            } while (userKey.Key != ConsoleKey.Enter && userKey.Key != ConsoleKey.Escape);
+            Jugador player;
+            Obstaculo[] obstaculos;
+            Enemigo[] enemigos;
+            Coin[] monedas;
 
             while (gameRunning)
             {
-                Jugador player = new Jugador();
-                Obstaculo[] obstaculos = new Obstaculo[10];
+                player = new Jugador();
+                obstaculos = new Obstaculo[10];
                 for(int i= 0;i < obstaculos.Length;i++)
-                {
                     obstaculos[i] = new Obstaculo();
-                }
-                Enemigo[] enemigos = new Enemigo[10];
+                enemigos = new Enemigo[10];
                 for (int i = 0; i < enemigos.Length; i++)
-                {
                     enemigos[i] = new Enemigo();
-                }
-                Coin[] monedas = new Coin[20];
+                monedas = new Coin[20];
                 for (int i = 0; i < monedas.Length; i++)
-                {
                     monedas[i] = new Coin();
-                }
 
                 while (gameRunning)
                 {
@@ -87,48 +113,45 @@ namespace ConsoleGame
                     }
                     //dibujar todas las entidades
                     for (int i = 0; i < monedas.Length; i++)
+                    {
+                        if(monedas[i] != null)
                         monedas[i].Dibujar();
+                    }
                     player.Dibujar();
                     for (int i = 0; i < obstaculos.Length; i++)
                         obstaculos[i].Dibujar();
                     for (int i = 0; i < enemigos.Length; i++)
                         enemigos[i].Mover();
+                    Console.SetCursorPosition(69, 0);
+                    Console.Write("SCORE: " + score);
 
-                    ChequearColisiones(player, obstaculos, enemigos, monedas);
+                    ChequearColisiones(player, obstaculos, enemigos, ref monedas);
 
                     System.Threading.Thread.Sleep(150);
-                }
-                if (score > highScore)
-                {
-                    highScore = score;
-                    score = 0;
                 }
 
                 Console.Clear();
                 Console.SetCursorPosition(37, 12);
                 Console.WriteLine("Game Over");
-                Console.SetCursorPosition(22, 13);
-                Console.Write("Nuevo Juego = Enter   Salir = Escape");
-
-                do
+                Console.ReadKey();
+                if (score > highScore)
                 {
-                    userKey = Console.ReadKey();
-                    switch (userKey.Key)
-                    {
-                        case ConsoleKey.Enter:
-                            gameRunning = true;
-                            break;
-                        case ConsoleKey.Escape:
-                            gameRunning = false;
-                            break;
-                    }
-                } while (userKey.Key != ConsoleKey.Enter && userKey.Key != ConsoleKey.Escape);
+                    highScore = score;
+                    FileStream fs = File.Create("Highscore.txt");
+                    BinaryWriter br = new BinaryWriter(fs);
+                    br.Write(highScore);
+                    Console.SetCursorPosition(23, 14);
+                    Console.Write("Nuevo Highscore! Ingresar nombre: ");
+                    nameHighscore = Console.ReadLine();
+                    br.Write(nameHighscore);
+                    br.Close();
+                    fs.Close();
+                }
+                Console.Clear();
+                score = 0;
+                Menu();
 
             }
-            Console.Clear();
-            Console.SetCursorPosition(36, 12);
-            Console.Write("saliendo");
-            Console.ReadKey();
         }
     }
 }
