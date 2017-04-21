@@ -19,5 +19,13 @@ namespace ConsoleGame
         {
             return locationY;
         }
+        public void setX(int x)
+        {
+            locationX = x;
+        }
+        public void setY(int y)
+        {
+            locationY = y;
+        }
     }
 }

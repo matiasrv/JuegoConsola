@@ -1,22 +1,23 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ConsoleGame
 {
     class Game
     {
         public static bool gameRunning = true;
-        public static int highScore = 0;
-        public static int score = 0;
+        private static int highScore = 0;
+        private static int score = 0;
         private static ConsoleKeyInfo userKey;
         private static string nameHighscore;
 
-        /*[Serializable]
-        struct player1
+        [Serializable]
+        struct Posicion
         {
-            public static int pX;
-            public static int pY;
-        }*/
+            public int x;
+            public int y;
+        }
 
         public Game()
         {
@@ -88,10 +89,23 @@ namespace ConsoleGame
             Obstaculo[] obstaculos;
             Enemigo[] enemigos;
             Coin[] monedas;
+            Posicion p1;
+            p1.x = p1.y = 0;
+            FileStream fs;
+            BinaryFormatter formatter;
+            
 
             while (gameRunning)
             {
-                player = new Jugador();
+                if (File.Exists("pos1.dat"))
+                {
+                    fs = File.OpenRead("pos1.dat");
+                    formatter = new BinaryFormatter();
+                    p1 = (Posicion)formatter.Deserialize(fs);
+                    fs.Close();
+                }
+
+                player = new Jugador(p1.x, p1.y);
                 obstaculos = new Obstaculo[10];
                 for(int i= 0;i < obstaculos.Length;i++)
                     obstaculos[i] = new Obstaculo();
@@ -101,7 +115,6 @@ namespace ConsoleGame
                 monedas = new Coin[20];
                 for (int i = 0; i < monedas.Length; i++)
                     monedas[i] = new Coin();
-
                 while (gameRunning)
                 {
                     Console.Clear();
@@ -111,7 +124,7 @@ namespace ConsoleGame
                         userKey = Console.ReadKey(true);
                         player.Mover(userKey);
                     }
-                    //dibujar todas las entidades
+                    //dibujando todas las entidades y caracteres.
                     for (int i = 0; i < monedas.Length; i++)
                     {
                         if(monedas[i] != null)
@@ -129,15 +142,28 @@ namespace ConsoleGame
 
                     System.Threading.Thread.Sleep(150);
                 }
-
+                //Pantalla game over
                 Console.Clear();
                 Console.SetCursorPosition(37, 12);
                 Console.WriteLine("Game Over");
                 Console.ReadKey();
+
+                //guardado de la posicion del jugador
+                p1.x = player.getX();
+                p1.y = player.getY();
+                if (!File.Exists("pos1.dat"))
+                    fs = File.Create("pos1.dat");
+                else
+                    fs = File.OpenWrite("pos1.dat");
+                formatter = new BinaryFormatter();
+                formatter.Serialize(fs, p1);
+                fs.Close();
+
+                //guardado del highscore
                 if (score > highScore)
                 {
                     highScore = score;
-                    FileStream fs = File.Create("Highscore.txt");
+                    fs = File.Create("Highscore.txt");
                     BinaryWriter br = new BinaryWriter(fs);
                     br.Write(highScore);
                     Console.SetCursorPosition(23, 14);
@@ -146,11 +172,10 @@ namespace ConsoleGame
                     br.Write(nameHighscore);
                     br.Close();
                     fs.Close();
-                }
-                Console.Clear();
-                score = 0;
-                Menu();
+                } score = 0;
 
+                Console.Clear();
+                Menu();
             }
         }
     }
