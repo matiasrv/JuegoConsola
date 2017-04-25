@@ -12,7 +12,8 @@ namespace ConsoleGame
     {
         public static string GetClima()
         {
-            string weather = "buenos aires";
+            Console.Write("Ingresar ciudad: ");
+            string weather = Console.ReadLine().ToLower();
             Console.Write("Obteniendo clima. . .");
             try
             {
