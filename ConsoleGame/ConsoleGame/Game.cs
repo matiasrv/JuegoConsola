@@ -21,7 +21,20 @@ namespace ConsoleGame
 
         public Game()
         {
-            if(File.Exists("Highscore.txt"))
+            switch (Clima.GetClima())
+            {
+                case "Cloudy":
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    break;
+                case "Sunny":
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    break;
+                default:
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    break;
+            }
+
+            if (File.Exists("Highscore.txt"))
             {
                 FileStream fs = File.OpenRead("Highscore.txt");
                 BinaryReader br = new BinaryReader(fs);
@@ -33,10 +46,14 @@ namespace ConsoleGame
             }
             Menu();
         }
-        public void Menu()
+        private void Menu()
         {
+            Console.Clear();
             if(highScore != 0)
+            {
+                Console.SetCursorPosition(0, 0);
                 Console.Write("Highscore = " + highScore + "  " + nameHighscore);
+            }
 
             Console.SetCursorPosition(22, 13);
             Console.Write("Nuevo Juego = Enter   Salir = Escape");

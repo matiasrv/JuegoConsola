@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,11 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clima.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="Enemigo.cs" />
     <Compile Include="Entidad.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Jugador.cs" />
+    <Compile Include="Mensaje.cs" />
     <Compile Include="Obstaculo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
